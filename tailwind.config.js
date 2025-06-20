@@ -2,10 +2,10 @@
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -24,12 +24,32 @@ module.exports = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "hsl(280, 100%, 70%)", // Purple-600 from register page
           foreground: "hsl(var(--primary-foreground))",
+          50: "hsl(280, 100%, 97%)",
+          100: "hsl(280, 100%, 95%)",
+          200: "hsl(280, 100%, 90%)",
+          300: "hsl(280, 100%, 83%)",
+          400: "hsl(280, 100%, 76%)",
+          500: "hsl(280, 100%, 70%)",
+          600: "hsl(280, 100%, 63%)",
+          700: "hsl(280, 100%, 56%)",
+          800: "hsl(280, 100%, 49%)",
+          900: "hsl(280, 100%, 42%)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
+          DEFAULT: "hsl(330, 100%, 70%)", // Pink-600 from register page
           foreground: "hsl(var(--secondary-foreground))",
+          50: "hsl(330, 100%, 97%)",
+          100: "hsl(330, 100%, 95%)",
+          200: "hsl(330, 100%, 90%)",
+          300: "hsl(330, 100%, 83%)",
+          400: "hsl(330, 100%, 76%)",
+          500: "hsl(330, 100%, 70%)",
+          600: "hsl(330, 100%, 63%)",
+          700: "hsl(330, 100%, 56%)",
+          800: "hsl(330, 100%, 49%)",
+          900: "hsl(330, 100%, 42%)",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -51,6 +71,19 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Enterprise color palette from register page
+        slate: {
+          50: "hsl(210, 40%, 98%)",
+          100: "hsl(210, 40%, 96%)",
+          200: "hsl(214, 32%, 91%)",
+          300: "hsl(213, 27%, 84%)",
+          400: "hsl(215, 20%, 65%)",
+          500: "hsl(215, 16%, 47%)",
+          600: "hsl(215, 19%, 35%)",
+          700: "hsl(215, 25%, 27%)",
+          800: "hsl(217, 33%, 17%)",
+          900: "hsl(222, 84%, 5%)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -71,7 +104,13 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      backgroundImage: {
+        "gradient-primary":
+          "linear-gradient(135deg, hsl(280, 100%, 70%) 0%, hsl(330, 100%, 70%) 100%)",
+        "gradient-primary-hover":
+          "linear-gradient(135deg, hsl(280, 100%, 63%) 0%, hsl(330, 100%, 63%) 100%)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};

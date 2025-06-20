@@ -75,9 +75,9 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <PublicRoute>
+              <ProtectedRoute>
                 <Home />
-              </PublicRoute>
+              </ProtectedRoute>
             }
           />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
