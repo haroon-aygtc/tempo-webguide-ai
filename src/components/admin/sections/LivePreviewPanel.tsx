@@ -223,37 +223,10 @@ const LivePreviewPanel = ({
     setIsLoading(true);
 
     try {
-      let response: PreviewMessage;
-
-      try {
-        // Try real API call
-        response = await AssistantService.sendPreviewMessage(
-          previewSession.id,
-          messageToSend,
-        );
-      } catch (error) {
-        // Fallback to mock response
-        const mockResponses = [
-          "I can help you with that! What specific assistance do you need?",
-          "Based on your configuration, I'm ready to assist with web navigation and form filling.",
-          "I understand your question. Let me provide some guidance.",
-          "That's a great question! Here's what I can help you with...",
-          "I'm here to make your web experience easier. How can I assist you today?",
-        ];
-
-        response = {
-          id: (Date.now() + 1).toString(),
-          role: "assistant",
-          content:
-            mockResponses[Math.floor(Math.random() * mockResponses.length)],
-          timestamp: new Date().toISOString(),
-          metadata: {
-            latency_ms: Math.floor(Math.random() * 1000) + 500,
-            token_count: Math.floor(Math.random() * 100) + 50,
-            cost_estimate: Math.random() * 0.01,
-          },
-        };
-      }
+      const response = await AssistantService.sendPreviewMessage(
+        previewSession.id,
+        messageToSend,
+      );
 
       setMessages((prev) => [...prev, response]);
 
@@ -262,9 +235,11 @@ const LivePreviewPanel = ({
         handleSpeak(response.content);
       }
     } catch (error) {
+      console.error("Failed to send preview message:", error);
       toast({
         title: "Error",
-        description: "Failed to send message",
+        description:
+          error instanceof Error ? error.message : "Failed to send message",
         variant: "destructive",
       });
     } finally {

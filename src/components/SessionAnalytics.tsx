@@ -198,7 +198,24 @@ const SessionAnalytics = () => {
     );
   }
 
-  if (!analyticsData) return null;
+  if (!analyticsData) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+        <div className="text-center">
+          <h3 className="text-lg font-semibold text-muted-foreground">
+            No Analytics Data Available
+          </h3>
+          <p className="text-sm text-muted-foreground mt-2">
+            Unable to load analytics data. Please check your connection and try
+            again.
+          </p>
+        </div>
+        <Button onClick={() => window.location.reload()} variant="outline">
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
