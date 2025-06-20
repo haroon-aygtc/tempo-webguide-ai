@@ -1,8 +1,12 @@
 import { apiClient } from "@/config/api";
+import { initializeCSRF } from "@/config/csrf";
 import { ApiResponse, AuthResponse, User } from "@/types/api";
 
 export class AuthService {
   static async login(email: string, password: string): Promise<AuthResponse> {
+    // Initialize CSRF token before login
+    await initializeCSRF();
+
     const response = await apiClient.post<ApiResponse<AuthResponse>>(
       "/auth/login",
       {
@@ -25,6 +29,9 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<AuthResponse> {
+    // Initialize CSRF token before registration
+    await initializeCSRF();
+
     const response = await apiClient.post<ApiResponse<AuthResponse>>(
       "/auth/register",
       {
@@ -47,6 +54,8 @@ export class AuthService {
   static async logout(): Promise<void> {
     try {
       await apiClient.post("/auth/logout");
+    } catch (error) {
+      console.warn("Logout request failed:", error);
     } finally {
       localStorage.removeItem("auth_token");
     }
@@ -63,8 +72,7 @@ export class AuthService {
   }
 
   static isAuthenticated(): boolean {
-    // Session-based auth doesn't need local storage check
-    // Authentication state is managed by the server session
-    return true; // This will be properly checked by getCurrentUser()
+    const token = localStorage.getItem("auth_token");
+    return !!token;
   }
 }

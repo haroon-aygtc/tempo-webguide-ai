@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { useRoutes, Routes, Route, Navigate } from "react-router-dom";
-import { useAuth } from "./hooks/useAuth";
+import { useAuth, AuthProvider } from "./hooks/useAuth";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./components/home";
 import LoginForm from "./components/auth/LoginForm";
 import RegisterForm from "./components/auth/RegisterForm";
@@ -42,7 +43,7 @@ const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-function App() {
+function AppContent() {
   return (
     <Suspense
       fallback={
@@ -55,6 +56,9 @@ function App() {
       }
     >
       <>
+        {/* Tempo routes */}
+        {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
+
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
@@ -81,12 +85,25 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Add this before the catchall route */}
+          {import.meta.env.VITE_TEMPO === "true" && (
+            <Route path="/tempobook/*" />
+          )}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
-        {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
         <Toaster />
       </>
     </Suspense>
+  );
+}
+
+function App() {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

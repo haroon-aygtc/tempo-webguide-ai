@@ -249,4 +249,207 @@ export class AssistantService {
 
     throw new Error(response.data.message || "Failed to translate content");
   }
+
+  // AI Provider Management
+  static async getProviders(): Promise<AIProvider[]> {
+    const response =
+      await apiClient.get<ApiResponse<AIProvider[]>>("/ai/providers");
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to get providers");
+  }
+
+  static async createProvider(
+    name: string,
+    type: string,
+    apiKey: string,
+    config: Record<string, any> = {},
+  ): Promise<AIProvider> {
+    const response = await apiClient.post<ApiResponse<AIProvider>>(
+      "/ai/providers",
+      {
+        name,
+        type,
+        api_key: apiKey,
+        config,
+      },
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to create provider");
+  }
+
+  static async updateProvider(
+    providerId: string,
+    updates: Partial<AIProvider>,
+  ): Promise<AIProvider> {
+    const response = await apiClient.patch<ApiResponse<AIProvider>>(
+      `/ai/providers/${providerId}`,
+      updates,
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to update provider");
+  }
+
+  static async deleteProvider(providerId: string): Promise<void> {
+    const response = await apiClient.delete<ApiResponse>(
+      `/ai/providers/${providerId}`,
+    );
+
+    if (!response.data.success) {
+      throw new Error(response.data.message || "Failed to delete provider");
+    }
+  }
+
+  static async testProvider(providerId: string): Promise<ProviderTestResult> {
+    const response = await apiClient.post<ApiResponse<ProviderTestResult>>(
+      `/ai/providers/${providerId}/test`,
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to test provider");
+  }
+
+  // AI Model Management
+  static async getModels(providerId?: string): Promise<AIModel[]> {
+    const url = providerId
+      ? `/ai/models?provider_id=${providerId}`
+      : "/ai/models";
+    const response = await apiClient.get<ApiResponse<AIModel[]>>(url);
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to get models");
+  }
+
+  static async updateModel(
+    modelId: string,
+    updates: Partial<AIModel>,
+  ): Promise<AIModel> {
+    const response = await apiClient.patch<ApiResponse<AIModel>>(
+      `/ai/models/${modelId}`,
+      updates,
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to update model");
+  }
+
+  static async testModel(
+    modelId: string,
+    prompt: string,
+    config?: Record<string, any>,
+  ): Promise<ModelTestResult> {
+    const response = await apiClient.post<ApiResponse<ModelTestResult>>(
+      `/ai/models/${modelId}/test`,
+      {
+        prompt,
+        config,
+      },
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to test model");
+  }
+
+  // Assistant Configuration
+  static async getConfigurations(): Promise<AssistantConfig[]> {
+    const response = await apiClient.get<ApiResponse<AssistantConfig[]>>(
+      "/assistant/configurations",
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to get configurations");
+  }
+
+  static async createConfiguration(
+    config: Omit<AssistantConfig, "id" | "created_at" | "updated_at">,
+  ): Promise<AssistantConfig> {
+    const response = await apiClient.post<ApiResponse<AssistantConfig>>(
+      "/assistant/configurations",
+      config,
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to create configuration");
+  }
+
+  static async updateConfiguration(
+    configId: string,
+    updates: Partial<AssistantConfig>,
+  ): Promise<AssistantConfig> {
+    const response = await apiClient.patch<ApiResponse<AssistantConfig>>(
+      `/assistant/configurations/${configId}`,
+      updates,
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to update configuration");
+  }
+
+  // Live Preview
+  static async createPreviewSession(configId: string): Promise<PreviewSession> {
+    const response = await apiClient.post<ApiResponse<PreviewSession>>(
+      "/assistant/preview/sessions",
+      {
+        config_id: configId,
+      },
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(
+      response.data.message || "Failed to create preview session",
+    );
+  }
+
+  static async sendPreviewMessage(
+    sessionId: string,
+    message: string,
+  ): Promise<PreviewMessage> {
+    const response = await apiClient.post<ApiResponse<PreviewMessage>>(
+      `/assistant/preview/sessions/${sessionId}/messages`,
+      {
+        content: message,
+      },
+    );
+
+    if (response.data.success) {
+      return response.data.data;
+    }
+
+    throw new Error(response.data.message || "Failed to send preview message");
+  }
 }

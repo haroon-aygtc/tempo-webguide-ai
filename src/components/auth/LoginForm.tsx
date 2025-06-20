@@ -26,7 +26,7 @@ import {
   Sparkles,
   Shield,
   Zap,
-  UserCheck,  
+  UserCheck,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { LoginFormData } from "@/form-handlers/authFormHandler";
@@ -384,8 +384,17 @@ const LoginForm = () => {
                       onClick={handleDemoLogin}
                       disabled={loading}
                     >
-                      <UserCheck className="mr-2 h-5 w-5" />
-                      Demo Admin Login
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Signing in...
+                        </>
+                      ) : (
+                        <>
+                          <UserCheck className="mr-2 h-5 w-5" />
+                          Demo Admin Login
+                        </>
+                      )}
                     </Button>
                   </div>
 
