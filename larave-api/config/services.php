@@ -35,4 +35,29 @@ return [
         ],
     ],
 
+    // AI Service Providers
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+        'organization' => env('OPENAI_ORGANIZATION'),
+        'base_url' => env('OPENAI_BASE_URL', 'https://api.openai.com/v1'),
+    ],
+
+    'anthropic' => [
+        'api_key' => env('ANTHROPIC_API_KEY'),
+        'base_url' => env('ANTHROPIC_BASE_URL', 'https://api.anthropic.com'),
+    ],
+
+    'google' => [
+        'gemini_api_key' => env('GOOGLE_GEMINI_API_KEY'),
+        'translate_api_key' => env('GOOGLE_TRANSLATE_API_KEY'),
+        'cloud_vision_key' => env('GOOGLE_CLOUD_VISION_KEY'),
+    ],
+
+    'azure' => [
+        'cognitive_services_key' => env('AZURE_COGNITIVE_SERVICES_KEY'),
+        'cognitive_services_endpoint' => env('AZURE_COGNITIVE_SERVICES_ENDPOINT'),
+        'speech_key' => env('AZURE_SPEECH_KEY'),
+        'speech_region' => env('AZURE_SPEECH_REGION'),
+    ],
+
 ];

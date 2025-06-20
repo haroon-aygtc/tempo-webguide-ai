@@ -105,6 +105,98 @@ export interface SessionAnalytics {
   language_distribution: Record<string, number>;
 }
 
+// AI Provider Types
+export interface AIProvider {
+  id: string;
+  name: string;
+  type: "openai" | "anthropic" | "gemini" | "huggingface" | "cohere";
+  api_key: string;
+  config: Record<string, any>;
+  is_enabled: boolean;
+  is_default: boolean;
+  status: "active" | "inactive" | "error";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AIModel {
+  id: string;
+  provider_id: string;
+  name: string;
+  display_name: string;
+  type: "chat" | "completion" | "embedding" | "image" | "audio";
+  description?: string;
+  capabilities: string[];
+  max_tokens?: number;
+  cost_per_token?: number;
+  is_enabled: boolean;
+  is_default: boolean;
+  is_free: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProviderTestResult {
+  status: "success" | "error";
+  response_time_ms: number;
+  available_models: string[];
+  error_message?: string;
+}
+
+export interface ModelTestResult {
+  id: string;
+  model_id: string;
+  prompt: string;
+  response: string;
+  latency_ms: number;
+  token_usage: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+  cost_estimate?: number;
+  created_at: string;
+}
+
+// Assistant Configuration Types
+export interface AssistantConfig {
+  id: string;
+  name: string;
+  provider_id: string;
+  model_id: string;
+  language: string;
+  temperature: number;
+  max_tokens: number;
+  system_prompt: string;
+  voice_enabled: boolean;
+  translation_enabled: boolean;
+  form_assistance_enabled: boolean;
+  element_analysis_enabled: boolean;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+// Preview Session Types
+export interface PreviewSession {
+  id: string;
+  config_id: string;
+  status: "active" | "ended";
+  created_at: string;
+}
+
+export interface PreviewMessage {
+  id: string;
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+  metadata?: {
+    latency_ms?: number;
+    token_count?: number;
+    cost_estimate?: number;
+  };
+}
+
 // Error Types
 export interface ApiError {
   message: string;

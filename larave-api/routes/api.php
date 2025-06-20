@@ -28,20 +28,45 @@ Route::prefix('auth')->group(function () {
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // Assistant session management
-    Route::prefix('assistant')->group(function () {
-        Route::post('/sessions', [AssistantController::class, 'startSession']);
-        Route::get('/sessions/active', [AssistantController::class, 'getActiveSession']);
-        Route::patch('/sessions/{session}/end', [AssistantController::class, 'endSession']);
-        Route::post('/interactions', [AssistantController::class, 'recordInteraction']);
-        Route::post('/analyze-element', [AssistantController::class, 'analyzeElement']);
-        Route::post('/form-suggestions', [AssistantController::class, 'getFormSuggestions']);
-        Route::post('/chat', [AssistantController::class, 'sendMessage']);
-        Route::post('/voice', [AssistantController::class, 'processVoiceInput']);
-        Route::post('/translate', [AssistantController::class, 'translateContent']);
-        Route::post('/documents', [AssistantController::class, 'uploadDocument']);
-        Route::post('/documents/{document}/suggestions', [AssistantController::class, 'getDocumentSuggestions']);
+    Route::post('/assistant/sessions', [AssistantController::class, 'startSession']);
+    Route::get('/assistant/sessions/active', [AssistantController::class, 'getActiveSession']);
+    Route::patch('/assistant/sessions/{session}/end', [AssistantController::class, 'endSession']);
+    Route::post('/assistant/interactions', [AssistantController::class, 'recordInteraction']);
+    Route::post('/assistant/analyze-element', [AssistantController::class, 'analyzeElement']);
+    Route::post('/assistant/form-suggestions', [AssistantController::class, 'getFormSuggestions']);
+    Route::post('/assistant/chat', [AssistantController::class, 'sendMessage']);
+    Route::post('/assistant/voice', [AssistantController::class, 'processVoiceInput']);
+    Route::post('/assistant/translate', [AssistantController::class, 'translateContent']);
+    Route::post('/assistant/documents', [AssistantController::class, 'uploadDocument']);
+    Route::post('/assistant/documents/{document}/suggestions', [AssistantController::class, 'getDocumentSuggestions']);
+    
+    // AI Provider and Model Management
+    Route::prefix('ai')->group(function () {
+        Route::get('/providers', [AssistantController::class, 'getProviders']);
+        Route::post('/providers', [AssistantController::class, 'createProvider']);
+        Route::patch('/providers/{provider}', [AssistantController::class, 'updateProvider']);
+        Route::delete('/providers/{provider}', [AssistantController::class, 'deleteProvider']);
+        Route::post('/providers/{provider}/test', [AssistantController::class, 'testProvider']);
+        
+        Route::get('/models', [AssistantController::class, 'getModels']);
+        Route::patch('/models/{model}', [AssistantController::class, 'updateModel']);
+        Route::post('/models/{model}/test', [AssistantController::class, 'testModel']);
     });
     
+    // Assistant Configuration
+    Route::prefix('assistant')->group(function () {
+        Route::get('/configurations', [AssistantController::class, 'getConfigurations']);
+        Route::post('/configurations', [AssistantController::class, 'createConfiguration']);
+        Route::patch('/configurations/{config}', [AssistantController::class, 'updateConfiguration']);
+        Route::delete('/configurations/{config}', [AssistantController::class, 'deleteConfiguration']);
+        
+        // Live Preview
+        Route::prefix('preview')->group(function () {
+            Route::post('/sessions', [AssistantController::class, 'createPreviewSession']);
+            Route::post('/sessions/{session}/messages', [AssistantController::class, 'sendPreviewMessage']);
+        });
+    });
+
     // Settings management
     Route::prefix('settings')->group(function () {
         Route::get('/', [SettingsController::class, 'index']);

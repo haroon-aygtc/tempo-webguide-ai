@@ -118,13 +118,34 @@ const SessionAnalytics = () => {
   };
 
   useEffect(() => {
-    // Simulate API call
     const fetchAnalytics = async () => {
       setLoading(true);
-      // In a real app, this would be an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setAnalyticsData(mockAnalyticsData);
-      setLoading(false);
+      try {
+        // Try to fetch real analytics data
+        const response = await fetch(
+          `/api/analytics/dashboard?period=${timeRange}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setAnalyticsData(data.data);
+        } else {
+          throw new Error("Failed to fetch analytics");
+        }
+      } catch (error) {
+        console.error("Analytics fetch failed, using mock data:", error);
+        // Fallback to mock data
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setAnalyticsData(mockAnalyticsData);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchAnalytics();
