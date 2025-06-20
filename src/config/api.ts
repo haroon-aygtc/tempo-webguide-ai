@@ -31,10 +31,15 @@ apiClient.interceptors.request.use(
 // Response interceptor for error handling
 apiClient.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("auth_token");
+      // Clear any stored auth state and redirect to login
       window.location.href = "/login";
+    }
+    if (error.response?.status === 419) {
+      // CSRF token mismatch, reinitialize and retry
+      await initializeCSRF();
+      return apiClient.request(error.config);
     }
     return Promise.reject(error);
   },

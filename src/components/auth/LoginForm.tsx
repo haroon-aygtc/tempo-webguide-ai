@@ -26,6 +26,7 @@ import {
   Sparkles,
   Shield,
   Zap,
+  UserCheck,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -124,6 +125,35 @@ const LoginForm = () => {
       const errorMessage = err instanceof Error ? err.message : "Login failed";
       toast({
         title: "Sign in failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    const demoEmail = "admin@demo.com";
+    const demoPassword = "demo123";
+
+    setEmail(demoEmail);
+    setPassword(demoPassword);
+
+    // Clear any existing errors
+    setErrors({});
+    setTouched({ email: true, password: true });
+
+    try {
+      await login(demoEmail, demoPassword);
+      toast({
+        title: "Demo Login Successful!",
+        description: "You've been logged in as a demo admin.",
+      });
+      navigate("/dashboard");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : "Demo login failed";
+      toast({
+        title: "Demo login failed",
         description: errorMessage,
         variant: "destructive",
       });
@@ -319,20 +349,44 @@ const LoginForm = () => {
                     )}
                   </div>
 
-                  <Button
-                    type="submit"
-                    className="w-full h-12 text-base font-medium bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 transition-all duration-200 shadow-lg hover:shadow-xl"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Signing in...
-                      </>
-                    ) : (
-                      "Sign In"
-                    )}
-                  </Button>
+                  <div className="space-y-3">
+                    <Button
+                      type="submit"
+                      className="w-full h-12 text-base font-medium bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 transition-all duration-200 shadow-lg hover:shadow-xl"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Signing in...
+                        </>
+                      ) : (
+                        "Sign In"
+                      )}
+                    </Button>
+
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t border-slate-200 dark:border-slate-700" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-white dark:bg-slate-800 px-2 text-slate-500 dark:text-slate-400">
+                          Or try demo
+                        </span>
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full h-12 text-base font-medium border-2 border-dashed border-primary/30 hover:border-primary/50 hover:bg-primary/5 transition-all duration-200"
+                      onClick={handleDemoLogin}
+                      disabled={loading}
+                    >
+                      <UserCheck className="mr-2 h-5 w-5" />
+                      Demo Admin Login
+                    </Button>
+                  </div>
 
                   <div className="text-center">
                     <span className="text-sm text-slate-600 dark:text-slate-400">

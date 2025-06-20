@@ -62,24 +62,9 @@ export class AuthService {
     throw new Error(response.data.message || "Failed to get user");
   }
 
-  static async refreshToken(): Promise<string> {
-    const response =
-      await apiClient.post<ApiResponse<{ token: string }>>("/auth/refresh");
-
-    if (response.data.success) {
-      const { token } = response.data.data;
-      localStorage.setItem("auth_token", token);
-      return token;
-    }
-
-    throw new Error(response.data.message || "Token refresh failed");
-  }
-
   static isAuthenticated(): boolean {
-    return !!localStorage.getItem("auth_token");
-  }
-
-  static getToken(): string | null {
-    return localStorage.getItem("auth_token");
+    // Session-based auth doesn't need local storage check
+    // Authentication state is managed by the server session
+    return true; // This will be properly checked by getCurrentUser()
   }
 }
