@@ -6,6 +6,7 @@ import LoginForm from "./components/auth/LoginForm";
 import RegisterForm from "./components/auth/RegisterForm";
 import routes from "tempo-routes";
 import { Toaster } from "./components/ui/toaster";
+import LandingPage from "./components/LandingPage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -55,7 +56,7 @@ function App() {
     >
       <>
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<LandingPage />} />
           <Route
             path="/login"
             element={

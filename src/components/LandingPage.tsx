@@ -53,6 +53,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { motion, AnimatePresence } from "framer-motion";
 import WebAssistant from "./WebAssistant";
+import { Link, useNavigate } from "react-router-dom";
 
 interface LandingPageProps {
   onGetStarted?: () => void;
@@ -73,7 +74,7 @@ const LandingPage = ({ onGetStarted = () => {} }: LandingPageProps) => {
   const [demoInput, setDemoInput] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("english");
   const [voiceEnabled, setVoiceEnabled] = useState(false);
-
+  const navigate = useNavigate();
   const features = [
     {
       icon: Bot,
@@ -172,7 +173,7 @@ const LandingPage = ({ onGetStarted = () => {} }: LandingPageProps) => {
       timestamp: new Date(),
     };
 
-    setDemoMessages((prev) => [...prev, userMessage]);
+    setDemoMessages((prev) => [...prev, userMessage as any]);
     setDemoInput("");
 
     setTimeout(() => {
@@ -269,9 +270,11 @@ const LandingPage = ({ onGetStarted = () => {} }: LandingPageProps) => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="outline" className="hidden sm:flex">
-              Sign In
-            </Button>
+            <Link to="/login" onClick={() => navigate("/login")}>
+              <Button variant="outline" className="hidden sm:flex">
+                Sign In
+              </Button>
+            </Link>
             <Button
               onClick={onGetStarted}
               className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
@@ -691,11 +694,12 @@ const LandingPage = ({ onGetStarted = () => {} }: LandingPageProps) => {
                                   key={message.id}
                                   initial={{ opacity: 0, y: 10 }}
                                   animate={{ opacity: 1, y: 0 }}
-                                  className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                                  transition={{ duration: 0.2 }}
+                                  className={`flex ${message.sender === "user" as any ? "justify-end" : "justify-start"}`}
                                 >
                                   <div
                                     className={`max-w-[85%] rounded-2xl p-3 text-sm shadow-sm ${
-                                      message.sender === "user"
+                                      message.sender === "user" as any
                                         ? "bg-primary text-primary-foreground"
                                         : "bg-muted/80 backdrop-blur-sm"
                                     }`}
