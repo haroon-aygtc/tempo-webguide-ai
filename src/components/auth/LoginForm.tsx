@@ -26,9 +26,10 @@ import {
   Sparkles,
   Shield,
   Zap,
-  UserCheck,
+  UserCheck,  
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { LoginFormData } from "@/form-handlers/authFormHandler";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -42,7 +43,7 @@ const LoginForm = () => {
   const { toast } = useToast();
 
   // Real-time validation
-  const validateField = (field: string, value: string) => {
+  const validateField = (field: keyof LoginFormData, value: string) => {
     const newErrors = { ...errors };
 
     switch (field) {
@@ -74,13 +75,13 @@ const LoginForm = () => {
     if (field === "password") setPassword(value);
 
     if (touched[field]) {
-      validateField(field, value);
+      validateField(field as keyof LoginFormData, value);
     }
   };
 
   const handleFieldBlur = (field: string, value: string) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
-    validateField(field, value);
+    validateField(field as keyof LoginFormData, value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -90,8 +91,8 @@ const LoginForm = () => {
     setTouched({ email: true, password: true });
 
     // Validate all fields
-    validateField("email", email);
-    validateField("password", password);
+    validateField("email" as keyof LoginFormData, email);
+    validateField("password" as keyof LoginFormData, password);
 
     // Check if there are any errors
     const hasErrors =

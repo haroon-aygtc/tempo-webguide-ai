@@ -45,9 +45,10 @@ export type RegisterFormData = z.infer<typeof registerSchema>;
 export const validateLoginField = (
   field: keyof LoginFormData,
   value: string,
+  allData?: Partial<LoginFormData>,
 ) => {
   try {
-    loginSchema.shape[field].parse(value);
+    loginSchema.parse({ ...allData, [field]: value });
     return null;
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -67,7 +68,7 @@ export const validateRegisterField = (
       // Special handling for confirm password
       registerSchema.parse({ ...allData, [field]: value });
     } else {
-      registerSchema.shape[field].parse(value);
+      registerSchema.parse({ ...allData, [field]: value });
     }
     return null;
   } catch (error) {

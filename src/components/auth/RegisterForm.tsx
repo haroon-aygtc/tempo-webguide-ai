@@ -29,6 +29,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { RegisterFormData } from "@/form-handlers/authFormHandler";
 
 const RegisterForm = () => {
   const [name, setName] = useState("");
@@ -45,7 +46,7 @@ const RegisterForm = () => {
   const { toast } = useToast();
 
   // Real-time validation
-  const validateField = (field: string, value: string) => {
+  const validateField = (field: keyof RegisterFormData, value: string) => {
     const newErrors = { ...errors };
 
     switch (field) {
@@ -119,13 +120,13 @@ const RegisterForm = () => {
     }
 
     if (touched[field]) {
-      validateField(field, value);
+      validateField(field as keyof RegisterFormData, value);
     }
   };
 
   const handleFieldBlur = (field: string, value: string) => {
     setTouched((prev) => ({ ...prev, [field]: true }));
-    validateField(field, value);
+    validateField(field as keyof RegisterFormData, value);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -140,10 +141,10 @@ const RegisterForm = () => {
     });
 
     // Validate all fields
-    validateField("name", name);
-    validateField("email", email);
-    validateField("password", password);
-    validateField("confirmPassword", confirmPassword);
+    validateField("name" as keyof RegisterFormData, name);
+    validateField("email" as keyof RegisterFormData, email);
+    validateField("password" as keyof RegisterFormData, password);
+    validateField("confirmPassword" as keyof RegisterFormData, confirmPassword);
 
     // Check if there are any errors
     const hasErrors =

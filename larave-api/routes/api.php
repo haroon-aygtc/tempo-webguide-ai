@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 // Authentication routes
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/register', [AuthController::class, 'register']);
+Route::get('/sanctum/csrf-cookie', [AuthController::class, 'getCsrfToken']);
 
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {

@@ -1,13 +1,15 @@
 import axios from "axios";
+import { initializeCSRF } from "./csrf";
 
 // API Configuration
 const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+    import.meta.env.VITE_API_URL || "http://localhost:8000/api"; // Change to your API base URL
 
 // Create axios instance with default config
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
+  withCredentials: true,  
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",
@@ -27,6 +29,15 @@ apiClient.interceptors.request.use(
     return Promise.reject(error);
   },
 );
+
+// Add CSRF token to all requests
+apiClient.interceptors.request.use(async (config: any) => {
+  const token = localStorage.getItem("csrf_token");
+  if (token) {
+    config.headers["X-CSRF-TOKEN"] = token;
+  }
+  return config;
+});
 
 // Response interceptor for error handling
 apiClient.interceptors.response.use(

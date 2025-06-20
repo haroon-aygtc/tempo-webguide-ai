@@ -5,12 +5,10 @@ import AdminLayout from "./admin/AdminLayout";
 import GeneralSettings from "./admin/sections/GeneralSettings";
 import AssistantSettings from "./admin/sections/AssistantSettings";
 import AppearanceSettings from "./admin/sections/AppearanceSettings";
-import LandingPage from "./LandingPage";
 
 const HomePage = () => {
   const { toast } = useToast();
   const { actualTheme } = useTheme();
-  const [showLanding, setShowLanding] = useState(true);
   const [activeSection, setActiveSection] = useState("general");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -214,9 +212,6 @@ const HomePage = () => {
     ),
   };
 
-  if (showLanding) {
-    return <LandingPage onGetStarted={() => setShowLanding(false)} />;
-  }
 
   return (
     <AdminLayout
